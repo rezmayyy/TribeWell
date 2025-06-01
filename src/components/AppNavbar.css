@@ -1,0 +1,13 @@
+
+.site-title {
+    background: linear-gradient(92.06deg, #F4A623 19.66%, #5954A6 80.36%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin: 0;
+    font-size: 2rem;
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
