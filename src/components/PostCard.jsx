@@ -1,20 +1,51 @@
+/**
+ * PostCard Component
+ * -------------------
+ * Renders a post card with user info, timestamp, caption, and media content.
+ * Supports image, video, audio, and article types.
+ * 
+ * Used in the HomePage to display individual posts in the user feed.
+ */
+
+import { useEffect, useState } from 'react';
 import { Card } from 'react-bootstrap';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../services/Firebase'; // adjust path if needed
 
 function PostCard({ post }) {
+  const [authorInfo, setAuthorInfo] = useState(null);
+
+  useEffect(() => {
+    const fetchAuthor = async () => {
+      if (!post.userId) return;
+      try {
+        const docRef = doc(db, 'users', post.userId);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setAuthorInfo(docSnap.data());
+        }
+      } catch (err) {
+        console.error('Error fetching user info:', err);
+      }
+    };
+
+    fetchAuthor();
+  }, [post.userId]);
+
   return (
     <Card className="mb-3">
       <Card.Body>
         {/* User Info */}
         <div className="d-flex align-items-center mb-2">
           <img
-            src={post.authorProfilePic || '/default-profile.png'}
+            src={authorInfo?.profilePicUrl || '/default-profile.png'}
             alt="Profile"
             width={40}
             height={40}
             className="rounded-circle me-2"
           />
           <div>
-            <strong>{post.userId || 'User'}</strong><br />
+            <strong>{authorInfo?.displayName || 'User'}</strong><br />
             <small className="text-muted">
               {post.timestamp?.toDate().toLocaleString() || 'Unknown date'}
             </small>

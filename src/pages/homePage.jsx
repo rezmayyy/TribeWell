@@ -16,7 +16,7 @@ function HomePage() {
   const [batchIndex, setBatchIndex] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
-  const LIMIT = 5;
+  const LIMIT = 10;
 
   useEffect(() => {
     if (!user) return;
@@ -57,45 +57,46 @@ function HomePage() {
     <Container fluid className="mt-4">
       <Row>
         {/* Left Sidebar: Followed Users */}
-        <Col md={3}>
-          <Card>
-            <Card.Body>
-              <Card.Title>Following</Card.Title>
-              {followedUsers.length === 0 ? (
-                <p>You’re not following anyone yet.</p>
-              ) : (
-                <>
-                  <ListGroup variant="flush">
-                    {followedUsers.map(f => (
-                      <ListGroup.Item key={f.id}>
-                        {f.displayName || f.id}
-                      </ListGroup.Item>
-                    ))}
-                  </ListGroup>
-                  {hasMore && (
-                    <div className="text-center mt-2">
-                      <Button
-                        onClick={loadMore}
-                        variant="outline-primary"
-                        size="sm"
-                        disabled={loadingMore}
-                      >
-                        {loadingMore ? (
-                          <>
-                            <Spinner animation="border" size="sm" className="me-2" />
-                            Loading...
-                          </>
-                        ) : (
-                          'Load More'
-                        )}
-                      </Button>
-                    </div>
-                  )}
-                </>
-              )}
-            </Card.Body>
-          </Card>
-        </Col>
+        <Col md={3} className="sticky-top" style={{ top: '80px', alignSelf: 'start', zIndex: 1 }}>
+  <Card>
+    <Card.Body>
+      <Card.Title>Following</Card.Title>
+      {followedUsers.length === 0 ? (
+        <p>You’re not following anyone yet.</p>
+      ) : (
+        <>
+          <ListGroup variant="flush">
+            {followedUsers.map(f => (
+              <ListGroup.Item key={f.id}>
+                {f.displayName || f.id}
+              </ListGroup.Item>
+            ))}
+          </ListGroup>
+          {hasMore && (
+            <div className="text-center mt-2">
+              <Button
+                onClick={loadMore}
+                variant="outline-primary"
+                size="sm"
+                disabled={loadingMore}
+              >
+                {loadingMore ? (
+                  <>
+                    <Spinner animation="border" size="sm" className="me-2" />
+                    Loading...
+                  </>
+                ) : (
+                  'Load More'
+                )}
+              </Button>
+            </div>
+          )}
+        </>
+      )}
+    </Card.Body>
+  </Card>
+</Col>
+
 
         {/* Middle Feed: Posts from followed users */}
         <Col md={6}>
