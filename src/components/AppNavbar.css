@@ -11,3 +11,8 @@
     font-weight: 700;
     letter-spacing: 0.5px;
 }
+
+.navbar-nav .nav-link {
+  font-family: 'Lora', serif;
+  font-weight: 600;
+}

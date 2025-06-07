@@ -1,3 +1,8 @@
+/* 
+* Fetches the other users that the current user is following
+*/
+
+
 import { db } from './Firebase';
 import { getDocs, collection, doc, getDoc } from 'firebase/firestore';
 

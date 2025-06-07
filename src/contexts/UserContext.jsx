@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
+import PageLoader from '../components/PageLoader';
 
 const UserContext = createContext();
 
@@ -16,7 +17,7 @@ export function UserProvider({ children }) {
                 // User is signed in
                 const userRef = doc(db, 'users', firebaseUser.uid); // Assuming your user docs are in the "users" collection
                 const userDoc = await getDoc(userRef);
-                
+
                 if (userDoc.exists()) {
                     // Combine firebaseUser and Firestore user data
                     const userData = { ...firebaseUser, ...userDoc.data() };
@@ -41,11 +42,11 @@ export function UserProvider({ children }) {
         }
 
         return () => unsubscribeAuth(); // Clean up the listener
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [db]); // No need for 'user' in the dependency array
 
     if (loading) {
-        return <div>Loading...</div>; // Optional: Show a loading state while fetching user
+        return <PageLoader />;
     }
 
     return (

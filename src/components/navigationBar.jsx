@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 
 import UserContext from '../contexts/UserContext';
@@ -35,9 +35,9 @@ function AppNavbar() {
                     <div className="d-flex justify-content-between align-items-center w-100 flex-wrap">
                         {/* Center Nav */}
                         <Nav className="mx-auto my-2 my-lg-0">
-                            <Nav.Link as={Link} to="/home">Home</Nav.Link>
-                            <Nav.Link as={Link} to="/test">Test</Nav.Link>
-                            <Nav.Link as={Link} to="/create">Create</Nav.Link>
+                            <Nav.Link as={NavLink} to="/home">Home</Nav.Link>
+                            <Nav.Link as={NavLink} to="/test">Test</Nav.Link>
+                            <Nav.Link as={NavLink} to="/create">Create</Nav.Link>
                         </Nav>
 
                         {/* Right Auth */}
