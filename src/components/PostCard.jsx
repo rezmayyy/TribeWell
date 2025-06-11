@@ -10,7 +10,7 @@
 import { useEffect, useState } from 'react';
 import { Card } from 'react-bootstrap';
 import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../services/Firebase'; // adjust path if needed
+import { db } from '../services/Firebase';
 
 function PostCard({ post }) {
   const [authorInfo, setAuthorInfo] = useState(null);

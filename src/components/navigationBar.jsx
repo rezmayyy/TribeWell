@@ -47,7 +47,7 @@ function AppNavbar() {
                         >
                             {user ? (
                                 <>
-                                    <Link to="/profile" className="d-flex align-items-center text-decoration-none me-2">
+                                    <Link to={`/profile/${user.uid}`} className="d-flex align-items-center text-decoration-none me-2">
                                         <img
                                             src={user.profilePicUrl || dummyPic}
                                             alt="Profile"
