@@ -18,6 +18,9 @@ function HomePage() {
   const FOLLOW_LIMIT = 50;
   const POST_LIMIT = 10;
 
+  // UseEffect for following list
+  // When the user is available, fetch the initial list of followed users and their posts.
+  // This sets loading states, retrieves followed user IDs, and loads a limited number of feed posts.
   useEffect(() => {
     if (!user) return;
 

@@ -17,7 +17,7 @@ function AppNavbar() {
             <Container>
 
                 {/* LEFT: Brand */}
-                <Navbar.Brand as={Link} to="/test" className="d-flex align-items-center">
+                <Navbar.Brand as={Link} to="/" className="d-flex align-items-center">
                     <img
                         src={Logo}
                         alt="TribeWell Logo"
