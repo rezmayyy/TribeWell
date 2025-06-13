@@ -1,36 +1,40 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../services/Firebase';
+import { fetchUserInfo } from '../services/fetchUserInfo';
+import { fetchUserPosts } from '../services/fetchUserPosts';
+import ProfileHeader from '../components/ProfileHeader';
+import ProfilePosts from '../components/ProfilePosts';
+import PageLoader from '../components/PageLoader';
 
 function ProfilePage() {
   const { userId } = useParams();
-  const [profileUser, setProfileUser] = useState(null);
+  const [userData, setUserData] = useState(null);
+  const [userPosts, setUserPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      const docRef = doc(db, 'users', userId);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        setProfileUser({ id: docSnap.id, ...docSnap.data() });
+    const loadProfile = async () => {
+      setLoading(true);
+      const user = await fetchUserInfo(userId);
+      if (user) {
+        setUserData(user);
+        const posts = await fetchUserPosts(userId);
+        setUserPosts(posts);
       }
-
       setLoading(false);
     };
 
-    fetchProfile();
+    loadProfile();
   }, [userId]);
 
-  if (loading) return <p>Loading profile...</p>;
-  if (!profileUser) return <p>User not found.</p>;
+  if (loading) return <PageLoader />;
+  if (!userData) return <p>User not found.</p>;
 
   return (
-    <div>
-      <h2>{profileUser.displayName || profileUser.id}'s Profile</h2>
-      <p>Email: {profileUser.email}</p>
-      {/* Add more user details or posts here */}
+    <div className="container mt-4">
+      <ProfileHeader user={userData} />
+      <hr />
+      <ProfilePosts posts={userPosts} />
     </div>
   );
 }

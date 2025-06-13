@@ -3,7 +3,7 @@ import { Card, ListGroup, Button, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { fetchFollowedUsers } from '../services/fetchFollowedUsers';
 
-const LIMIT = 5;
+const LIMIT = 7;  // Change amount of people shown in following list
 
 function FollowedUsersSidebar({ userId }) {
   const [followedUsers, setFollowedUsers] = useState([]);
