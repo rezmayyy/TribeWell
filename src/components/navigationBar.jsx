@@ -36,8 +36,10 @@ function AppNavbar() {
                         {/* Center Nav */}
                         <Nav className="mx-auto my-2 my-lg-0">
                             <Nav.Link as={NavLink} to="/home">Home</Nav.Link>
-                            <Nav.Link as={NavLink} to="/test">Test</Nav.Link>
+                            <Nav.Link as={NavLink} to="/explore">Explore</Nav.Link>
+                            <Nav.Link as={NavLink} to="/events">Events</Nav.Link>
                             <Nav.Link as={NavLink} to="/create">Create</Nav.Link>
+                            <Nav.Link as={NavLink} to="/test">Test</Nav.Link>
                         </Nav>
 
                         {/* Right Auth */}
