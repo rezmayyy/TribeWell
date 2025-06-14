@@ -8,6 +8,7 @@ export default function DailyCheckIn() {
   const [status, setStatus] = useState(null);
   const [hasCheckedIn, setHasCheckedIn] = useState(false);
   const [streak, setStreak] = useState(0);
+  const [points, setPoints] = useState(0); // new state
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -16,6 +17,7 @@ export default function DailyCheckIn() {
       const res = await getCheckInStatus(user.uid);
       setHasCheckedIn(res.hasCheckedIn);
       setStreak(res.streak);
+      setPoints(res.points); // set points from status
       setLoading(false);
     };
     checkStatus();
@@ -26,15 +28,20 @@ export default function DailyCheckIn() {
     const res = await handleDailyCheckIn(user.uid);
     setHasCheckedIn(true);
     setStreak(res.streak);
-    setStatus(res.message + " 🔥 Streak: " + res.streak);
+    setPoints(res.points); // update points after check-in
+    setStatus(`${res.message} 🔥 Streak: ${res.streak} | 🏆 Points: ${res.points}`);
   };
 
   if (loading) return <Spinner animation="border" size="sm" />;
 
   return (
     <div>
+      <Alert variant="secondary">🏆 Total StreakPoints: {points}</Alert>
+
       {hasCheckedIn ? (
-        <Alert variant="success">✅ You've already checked in today! 🔥 Streak: {streak}</Alert>
+        <Alert variant="success">
+          ✅ You've already checked in today! 🔥 Streak: {streak}
+        </Alert>
       ) : (
         <>
           <Button variant="success" onClick={onCheckIn}>Check In</Button>

@@ -1,8 +1,3 @@
-/*
-  Check in resets at midnight so yes if a user checks in at 11:59pm they can check in
-  again at 12:01am which is only 2 minutes later. 
-*/
-
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "./Firebase";
 
@@ -16,13 +11,19 @@ export async function handleDailyCheckIn(userId) {
 
   const todayStr = getTodayString();
   let streak = 1;
+  let currentPoints = 0;
 
   if (userSnap.exists()) {
     const data = userSnap.data();
     const lastCheckInStr = data.lastCheckInStr || null;
+    currentPoints = data.points || 0;
 
     if (lastCheckInStr === todayStr) {
-      return { message: "Already checked in today!", streak: data.streak };
+      return {
+        message: "Already checked in today!",
+        streak: data.streak || 0,
+        points: currentPoints
+      };
     }
 
     const prevDate = new Date(data.lastCheckInStr);
@@ -32,13 +33,21 @@ export async function handleDailyCheckIn(userId) {
     }
   }
 
+  // Award 100 StreakPoints
+  const newPoints = currentPoints + 100;
+
   await setDoc(userRef, {
     lastCheckIn: serverTimestamp(),
     lastCheckInStr: todayStr,
-    streak
+    streak,
+    points: newPoints
   }, { merge: true });
 
-  return { message: "Check-in successful!", streak };
+  return {
+    message: "Check-in successful! 🎉 You earned 100 StreakPoints.",
+    streak,
+    points: newPoints
+  };
 }
 
 export async function getCheckInStatus(userId) {
@@ -51,9 +60,10 @@ export async function getCheckInStatus(userId) {
     const hasCheckedIn = lastCheckInStr === getTodayString();
     return {
       hasCheckedIn,
-      streak: data.streak || 0
+      streak: data.streak || 0,
+      points: data.points || 0
     };
   }
 
-  return { hasCheckedIn: false, streak: 0 };
+  return { hasCheckedIn: false, streak: 0, points: 0 };
 }
