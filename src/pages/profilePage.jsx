@@ -5,6 +5,7 @@ import { fetchUserPosts } from '../services/fetchUserPosts';
 import ProfileHeader from '../components/ProfileHeader';
 import ProfilePosts from '../components/ProfilePosts';
 import PageLoader from '../components/PageLoader';
+import { Card, Tabs, Tab } from 'react-bootstrap';
 
 function ProfilePage() {
   const { userId } = useParams();
@@ -34,7 +35,35 @@ function ProfilePage() {
     <div className="container mt-4">
       <ProfileHeader user={userData} />
       <hr />
-      <ProfilePosts posts={userPosts} />
+
+      <Card className="mb-4">
+        <Card.Body>
+          <Card.Title style={{ fontSize: '2rem' }}>
+            View My Posts
+          </Card.Title>
+          <Card.Text className="text-muted">
+            Check out all the content I've posted!
+          </Card.Text>
+        </Card.Body>
+      </Card>
+
+      <Tabs defaultActiveKey="posts" id="profile-tabs" className="mb-3">
+        <Tab eventKey="posts" title="Posts" className="mb-5">
+          <ProfilePosts posts={userPosts} />
+        </Tab>
+        <Tab eventKey="about" title="About" className="mb-5">
+          <p>This is the About tab. Add user details here later.</p>
+          <a href="https://rezmayyy.github.io/MyWebsite/" target="_blank" rel="noopener noreferrer">
+            Visit My Website!
+          </a>
+        </Tab>
+        <Tab eventKey="followers" title="Followers" className="mb-5">
+          <p>Coming soon: Followers List.</p>
+        </Tab>
+        <Tab eventKey="following" title="Following" className="mb-5">
+          <p>Coming soon: Following List.</p>
+        </Tab>
+      </Tabs>
     </div>
   );
 }

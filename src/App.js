@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { UserProvider } from './contexts/UserContext';
 
 import AppNavbar from './components/navigationBar';
+import Footer from './components/footer';
 
 import TestPage from './pages/testPage'
 import Login from './pages/loginPage';
@@ -29,6 +30,7 @@ function App() {
 
             <Route path="/test" element={<TestPage/>}></Route>
           </Routes>
+          <Footer />
         </Router>
       </UserProvider>
     </div>

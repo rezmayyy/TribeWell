@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import { Card } from 'react-bootstrap';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../services/Firebase';
+import dummyPic from '../assets/dummyPic.jpeg';
 
 function PostCard({ post }) {
   const [authorInfo, setAuthorInfo] = useState(null);
@@ -38,7 +39,7 @@ function PostCard({ post }) {
         {/* User Info */}
         <div className="d-flex align-items-center mb-2">
           <img
-            src={authorInfo?.profilePicUrl || '/default-profile.png'}
+            src={authorInfo?.profilePicUrl || dummyPic}
             alt="Profile"
             width={40}
             height={40}
