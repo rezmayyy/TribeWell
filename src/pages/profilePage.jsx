@@ -47,15 +47,21 @@ function ProfilePage() {
         </Card.Body>
       </Card>
 
-      <Tabs defaultActiveKey="posts" id="profile-tabs" className="mb-3">
-        <Tab eventKey="posts" title="Posts" className="mb-5">
-          <ProfilePosts posts={userPosts} />
-        </Tab>
+      <Tabs defaultActiveKey="about" id="profile-tabs" className="mb-3">
         <Tab eventKey="about" title="About" className="mb-5">
           <p>This is the About tab. Add user details here later.</p>
           <a href="https://rezmayyy.github.io/MyWebsite/" target="_blank" rel="noopener noreferrer">
             Visit My Website!
           </a>
+        </Tab>
+        <Tab eventKey="posts" title="Posts" className="mb-5">
+          <ProfilePosts posts={userPosts} />
+        </Tab>
+        <Tab eventKey="courses" title="Courses" className="mb-5">
+          <p>Coming soon: Courses.</p>
+        </Tab>
+        <Tab eventKey="events" title="Events" className="mb-5">
+          <p>Coming soon: Events.</p>
         </Tab>
         <Tab eventKey="followers" title="Followers" className="mb-5">
           <p>Coming soon: Followers List.</p>

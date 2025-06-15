@@ -39,7 +39,7 @@ function FollowedUsersSidebar({ userId }) {
   return (
     <Card>
       <Card.Body>
-        <Card.Title>Following</Card.Title>
+        <Card.Title>Your Healers</Card.Title>
         {loading ? (
           <div className="text-center"><Spinner animation="border" /></div>
         ) : followedUsers.length === 0 ? (

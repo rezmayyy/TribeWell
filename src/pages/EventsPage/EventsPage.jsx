@@ -205,7 +205,7 @@ function EventsPage() {
 
             <div id="upcoming-events" className="upcoming-events-section">
                 <h1 className="events-title">Upcoming Events.</h1>
-                <button className="create-event-button" onClick={() => navigate("/create-event")}>
+                <button className="create-event-button" onClick={() => navigate("/create")}>
                     Create Event
                 </button>
                 {loading ? (

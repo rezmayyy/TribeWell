@@ -13,6 +13,7 @@ import HomePage from './pages/homePage';
 import ProfilePage from './pages/profilePage';
 import LandingPage from './pages/landingPage/landingPage';
 import EventsPage from './pages/EventsPage/EventsPage';
+import BlogsPage from './pages/blogsPage';
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
             <Route path="/home" element={<HomePage/>}></Route>
             <Route path="/profile/:userId" element={<ProfilePage />} />
             <Route path="/events" element={<EventsPage />} />
+            <Route path="/explore" element={<BlogsPage />} />
 
             <Route path="/test" element={<TestPage/>}></Route>
           </Routes>
