@@ -69,6 +69,9 @@ function ProfilePage() {
         <Tab eventKey="following" title="Following" className="mb-5">
           <p>Coming soon: Following List.</p>
         </Tab>
+        <Tab eventKey="discussion" title="Discussion" className="mb-5">
+          <p>Coming soon: Discussions.</p>
+        </Tab>
       </Tabs>
     </div>
   );

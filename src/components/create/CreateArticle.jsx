@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
-import { db, auth } from '../../services/Firebase';
+import { db, auth, storage } from '../../services/Firebase';
 import { collection, addDoc, serverTimestamp, doc, getDoc } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { onAuthStateChanged } from 'firebase/auth';
 import { Editor, EditorState } from 'draft-js';
 import { stateToHTML } from 'draft-js-export-html';
 import 'draft-js/dist/Draft.css';
 import TagSelector from '../TagSystem/TagSelector';
-import { Button, Form, Container, Alert } from 'react-bootstrap';
+import { Button, Form, Container, Alert, Row, Col } from 'react-bootstrap';
 
 function CreateArticle() {
   const [user, setUser] = useState(null);
@@ -15,10 +16,10 @@ function CreateArticle() {
   const [description, setDescription] = useState('');
   const [body, setBody] = useState(EditorState.createEmpty());
   const [tags, setTags] = useState([]);
+  const [thumbnail, setThumbnail] = useState(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  // Get current user and role
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
@@ -39,24 +40,36 @@ function CreateArticle() {
 
     setLoading(true);
     try {
+      let thumbnailURL = '';
+
+      if (thumbnail) {
+        const thumbRef = ref(storage, `thumbnails/${user.uid}/${Date.now()}_${thumbnail.name}`);
+        const uploadResult = await uploadBytes(thumbRef, thumbnail);
+        thumbnailURL = await getDownloadURL(uploadResult.ref);
+      }
+
       const htmlBody = stateToHTML(body.getCurrentContent());
+
       await addDoc(collection(db, 'content-posts'), {
         type: 'article',
         title,
         description,
-        body: htmlBody, 
+        body: htmlBody,
         userId: user.uid,
         tags: tags.map(tag => tag.value),
+        thumbnailURL,
         timestamp: serverTimestamp(),
         status: 'approved',
         views: 0,
         likesCount: 0,
       });
+
       setSuccess(true);
       setTitle('');
       setDescription('');
       setBody(EditorState.createEmpty());
       setTags([]);
+      setThumbnail(null);
     } catch (err) {
       console.error('Error posting article:', err);
     } finally {
@@ -69,12 +82,17 @@ function CreateArticle() {
   };
 
   if (!user || (role !== 'healer' && role !== 'admin')) {
-    return <Alert variant="danger">You must be a healer or admin to post articles.</Alert>;
+    return <Alert variant="danger">You must be a healer to post articles. Apply to be a healer today!</Alert>;
   }
 
   return (
-    <Container className="create-article">
-      <h2 className="mb-4">Create Article</h2>
+    <Container className="create-article my-5 p-4 border rounded shadow-sm">
+      <Row className="mb-4">
+        <Col>
+          <h2>Create Article</h2>
+        </Col>
+      </Row>
+
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
           <Form.Control
@@ -95,6 +113,15 @@ function CreateArticle() {
             onChange={(e) => setDescription(e.target.value)}
             required
             className="form-control-lg"
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>Optional Thumbnail Image</Form.Label>
+          <Form.Control
+            type="file"
+            accept="image/*"
+            onChange={(e) => setThumbnail(e.target.files[0])}
           />
         </Form.Group>
 

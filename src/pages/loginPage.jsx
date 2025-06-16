@@ -4,6 +4,7 @@ import { FaUser, FaLock } from "react-icons/fa";
 import { auth } from "../services/Firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import UserContext from "../contexts/UserContext";
+import { Form, Button, Container, Row, Col, Alert } from "react-bootstrap";
 
 function Login() {
     const navigate = useNavigate();
@@ -14,7 +15,7 @@ function Login() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError(""); // reset previous
+        setError(""); // reset previous errors
 
         try {
             const { user } = await signInWithEmailAndPassword(auth, email, password);
@@ -39,48 +40,62 @@ function Login() {
     };
 
     return (
-        <div className="Home">
-            <div className="wrapper">
-                <div className="form-box login">
-                    <form onSubmit={handleSubmit}>
-                        <h1>Login</h1>
+        <Container className="d-flex justify-content-center align-items-center vh-100">
+            <Row className="w-100">
+                <Col md={6} lg={4} className="mx-auto">
+                    <div className="p-4 border rounded shadow-sm">
+                        <h1 className="text-center mb-4">Login</h1>
 
-                        <div className="input-box">
-                            <FaUser className="icon" />
-                            <input
-                                type="email"
-                                placeholder="Email"
-                                required
-                                value={email}
-                                onChange={e => setEmail(e.target.value)}
-                            />
-                        </div>
+                        <Form onSubmit={handleSubmit}>
+                            <Form.Group controlId="formEmail" className="mb-3">
+                                <Form.Label>Email</Form.Label>
+                                <div className="input-group">
+                                    <div className="input-group-text">
+                                        <FaUser />
+                                    </div>
+                                    <Form.Control
+                                        type="email"
+                                        placeholder="Enter your email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                            </Form.Group>
 
-                        <div className="input-box">
-                            <FaLock className="icon" />
-                            <input
-                                type="password"
-                                placeholder="Password"
-                                required
-                                value={password}
-                                onChange={e => setPassword(e.target.value)}
-                            />
-                        </div>
+                            <Form.Group controlId="formPassword" className="mb-3">
+                                <Form.Label>Password</Form.Label>
+                                <div className="input-group">
+                                    <div className="input-group-text">
+                                        <FaLock />
+                                    </div>
+                                    <Form.Control
+                                        type="password"
+                                        placeholder="Enter your password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                            </Form.Group>
 
-                        {error && <p className="error-message">{error}</p>}
+                            {error && <Alert variant="danger">{error}</Alert>}
 
-                        <button type="submit">Login</button>
+                            <Button variant="primary" type="submit" block>
+                                Login
+                            </Button>
+                        </Form>
 
-                        <div className="link">
+                        <div className="mt-3 text-center">
                             <p>
                                 Don’t have an account? <Link to="/signup">Sign Up</Link>
                             </p>
                             <Link to="/recover">Forgot password?</Link>
                         </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+                    </div>
+                </Col>
+            </Row>
+        </Container>
     );
 }
 

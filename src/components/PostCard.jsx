@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Card } from 'react-bootstrap';
+import { Card, Badge } from 'react-bootstrap';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../services/Firebase';
 
@@ -10,11 +10,11 @@ function PostCard({ post }) {
   // Fetch a random image from Lorem Picsum
   useEffect(() => {
     const fetchRandomImage = () => {
-      const randomImg = `https://picsum.photos/200/200?random=${Math.random()}`; // Ensure a square size
+      const randomImg = `https://picsum.photos/200/200?random=${Math.random()}`;
       setRandomImage(randomImg);
     };
 
-    fetchRandomImage(); // Call the function to set the random image URL
+    fetchRandomImage();
   }, []);
 
   useEffect(() => {
@@ -40,13 +40,13 @@ function PostCard({ post }) {
         {/* User Info */}
         <div className="d-flex align-items-center mb-2">
           <img
-            src={authorInfo?.profilePicUrl || randomImage} // Use randomImage if no profile picture
+            src={authorInfo?.profilePicUrl || randomImage}
             alt="Profile"
             width={40}
             height={40}
             className="rounded-circle me-2"
             style={{
-              objectFit: 'cover',  // Make sure the image fits within the circle
+              objectFit: 'cover',
             }}
           />
           <div>
@@ -54,52 +54,85 @@ function PostCard({ post }) {
             <small className="text-muted">
               {post.timestamp?.toDate().toLocaleString() || 'Unknown date'}
             </small>
+            <br />
+            <Badge bg="secondary" className="mt-1 text-capitalize">
+              {post.type || 'post'}
+            </Badge>
           </div>
         </div>
 
-        {/* Caption or Title */}
-        <Card.Text>
-          {post.caption || post.title || <em>No description</em>}
-        </Card.Text>
-
         {/* Media Content */}
-        {post.type === 'image' && (
-          <div className="d-flex justify-content-center">
-            <Card.Img
-              variant="bottom"
-              src={post.fileURL}
-              style={{
-                width: '100%', // Use full width of the container
-                maxWidth: '100%', // Remove hard-coded size, let it fill available space
-                height: 'auto',  // Let the height adjust to maintain aspect ratio
-                objectFit: 'cover',  // Ensure the image fills the space without distortion
-              }}
-            />
+        {post.type === 'image' && post.fileURL && (
+          <div className="d-flex flex-column">
+            <div className="d-flex justify-content-center">
+              <Card.Img
+                variant="bottom"
+                src={post.fileURL}
+                style={{
+                  width: '70%',
+                  maxWidth: '100%',
+                  height: 'auto',
+                  objectFit: 'cover',
+                }}
+              />
+            </div>
+            <div className="d-flex align-items-baseline mt-2 px-4">
+              <strong className="me-2">{authorInfo?.displayName || 'User'}:</strong>
+              <Card.Text className="mb-0">
+                {post.caption || post.title || <em>No description</em>}
+              </Card.Text>
+            </div>
           </div>
         )}
-        {post.type === 'video' && (
+
+        {post.type === 'video' && post.fileURL && (
           <video controls className="w-100 mt-2">
             <source src={post.fileURL} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         )}
-        {post.type === 'audio' && (
-          <audio controls className="w-100 mt-2">
-            <source src={post.fileURL} type="audio/mpeg" />
-            Your browser does not support the audio element.
-          </audio>
+
+        {post.type === 'audio' && post.fileURL && (
+          <div className="d-flex flex-column mt-2">
+            {/* Thumbnail for Audio */}
+            <div className="d-flex justify-content-center mb-2">
+              <img
+                src={post.thumbnailURL || randomImage}
+                alt="Audio Thumbnail"
+                style={{
+                  width: '70%',
+                  maxWidth: '100%',
+                  height: 'auto',
+                  objectFit: 'cover',
+                  marginBottom: '1rem',
+                }}
+              />
+            </div>
+            {/* Audio Player */}
+            <audio controls className="w-100">
+              <source src={post.fileURL} type="audio/mpeg" />
+              Your browser does not support the audio element.
+            </audio>
+            <div className="mt-2">
+              <strong>{authorInfo?.displayName || 'User'}:</strong>
+              <Card.Text className="mb-0">
+                {post.description || <em>No description</em>}
+              </Card.Text>
+            </div>
+          </div>
         )}
+
         {post.type === 'article' && (
           <div className="mt-2 p-2 border rounded">
             <div className="d-flex justify-content-center">
               <img
-                src={post.thumbnailURL || randomImage} // Use randomImage if no thumbnail
+                src={post.thumbnailURL || randomImage}
                 alt="Article Thumbnail"
                 style={{
-                  width: '70%', // Take up full width of the container
-                  maxWidth: '100%', // Make the thumbnail responsive
-                  height: 'auto', // Maintain aspect ratio of the image
-                  objectFit: 'cover', // Ensure the image is covered correctly
+                  width: '70%',
+                  maxWidth: '100%',
+                  height: 'auto',
+                  objectFit: 'cover',
                   marginBottom: '1rem',
                 }}
               />

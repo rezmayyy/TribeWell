@@ -1,9 +1,10 @@
 import { Container, Nav, Tab, Row, Col } from "react-bootstrap";
-import CreateArticle from "../components/create/CreateArticle";  // Assuming you have this component
-import CreateAudio from "../components/create/CreateAudio";      // Your CreateAudio component
-import CreateEvent from "../components/create/CreateEvent";      // Assuming you have this component
-import CreateVideo from "../components/create/CreateVideo";      // Assuming you have this component
-import CreatePost from "../components/create/CreatePost";        // Assuming you have this component
+import CreateArticle from "../components/create/CreateArticle"; 
+import CreateAudio from "../components/create/CreateAudio";     
+import CreateEvent from "../components/create/CreateEvent";      
+import CreateVideo from "../components/create/CreateVideo";     
+import CreatePost from "../components/create/CreatePost";       
+import CreateCourse from "../components/create/CreateCourse";
 
 function CreatePage() {
   return (
@@ -21,10 +22,13 @@ function CreatePage() {
             <Nav.Link eventKey="audio">Create Audio</Nav.Link>
           </Nav.Item>
           <Nav.Item>
+            <Nav.Link eventKey="video">Create Video</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
             <Nav.Link eventKey="event">Create Event</Nav.Link>
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link eventKey="video">Create Video</Nav.Link>
+            <Nav.Link eventKey="course">Create Course</Nav.Link>
           </Nav.Item>
         </Nav>
         <Row>
@@ -39,11 +43,14 @@ function CreatePage() {
               <Tab.Pane eventKey="audio">
                 <CreateAudio />
               </Tab.Pane>
+              <Tab.Pane eventKey="video">
+                <CreateVideo /> {/* Add your CreateVideo component here */}
+              </Tab.Pane>
               <Tab.Pane eventKey="event">
                 <CreateEvent /> {/* Add your CreateEvent component here */}
               </Tab.Pane>
-              <Tab.Pane eventKey="video">
-                <CreateVideo /> {/* Add your CreateVideo component here */}
+              <Tab.Pane eventKey="course">
+                <CreateCourse /> {/* Add your CreateCourse component here */}
               </Tab.Pane>
             </Tab.Content>
           </Col>
