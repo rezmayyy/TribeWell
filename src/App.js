@@ -14,6 +14,7 @@ import ProfilePage from './pages/profilePage';
 import LandingPage from './pages/landingPage/landingPage';
 import EventsPage from './pages/EventsPage/EventsPage';
 import BlogsPage from './pages/blogsPage';
+import CreateArticle from './pages/createPage';
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
             <Route path="/profile/:userId" element={<ProfilePage />} />
             <Route path="/events" element={<EventsPage />} />
             <Route path="/explore" element={<BlogsPage />} />
+            <Route path="/create" element={<CreateArticle />} />
 
             <Route path="/test" element={<TestPage/>}></Route>
           </Routes>
