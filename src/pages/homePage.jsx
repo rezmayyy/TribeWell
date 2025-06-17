@@ -8,6 +8,8 @@ import DailyCheckIn from "../components/DailyCheckIn";
 import PageLoader from '../components/PageLoader';
 import FollowedUsersSidebar from '../components/FollowedUsersSidebar';
 
+import HomeHeader from '../components/home/homeHeader';
+
 function HomePage() {
   const { user } = useContext(UserContext);
 
@@ -47,7 +49,8 @@ function HomePage() {
 
   return (
     <Container fluid className="mt-4">
-      <Row>
+      <HomeHeader />
+      <Row className="mt-5">
         {/* Left Sidebar: Followed Users */}
         <Col md={3} className="sticky-top" style={{ top: '80px', alignSelf: 'start', zIndex: 1 }}>
           <FollowedUsersSidebar userId={user.uid} />
