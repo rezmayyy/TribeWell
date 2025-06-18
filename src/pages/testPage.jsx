@@ -1,30 +1,37 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 function TestPage() {
   useEffect(() => {
-    // Inject Botpress webchat script
-    const injectScript = document.createElement('script');
-    injectScript.src = 'https://cdn.botpress.cloud/webchat/v3.0/inject.js';
-    injectScript.async = true;
-    document.body.appendChild(injectScript);
+    // Load the first script (Botpress Webchat)
+    const script1 = document.createElement('script');
+    script1.src = "https://cdn.botpress.cloud/webchat/v3.0/inject.js";
+    script1.async = true;
+    
+    // After the first script loads, load the second script
+    script1.onload = () => {
+      const script2 = document.createElement('script');
+      script2.src = "https://files.bpcontent.cloud/2025/06/17/01/20250617011411-A1O2RN4E.js";
+      script2.async = true;
+      document.body.appendChild(script2);
+    };
 
-    // Inject your custom Botpress config script
-    const configScript = document.createElement('script');
-    configScript.src = 'https://files.bpcontent.cloud/2025/06/17/01/20250617011411-A1O2RN4E.js';
-    configScript.async = true;
-    document.body.appendChild(configScript);
+    // Append the first script to the body
+    document.body.appendChild(script1);
 
-    // Cleanup on unmount
+    // Cleanup: remove the script tags when the component unmounts
     return () => {
-      document.body.removeChild(injectScript);
-      document.body.removeChild(configScript);
+      document.body.removeChild(script1);
+      const script2 = document.querySelector(`script[src="https://files.bpcontent.cloud/2025/06/17/01/20250617011411-A1O2RN4E.js"]`);
+      if (script2) {
+        document.body.removeChild(script2);
+      }
     };
   }, []);
 
   return (
     <div>
-      <h1>Hello, TestPage!</h1>
-      <p>The chatbot should appear in the bottom-right corner shortly.</p>
+      <h1>Test Page for Botpress</h1>
+      <p>This is a test page to check the Botpress Webchat integration.</p>
     </div>
   );
 }
