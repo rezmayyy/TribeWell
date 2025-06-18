@@ -136,7 +136,7 @@ function PostCard({ post }) {
           </div>
         )}
 
-        {/* Like, Comment, Share Buttons */}
+        {/* Like, Comment, Share Button*/}
         <div className="mt-3 d-flex justify-content-between">
           <ButtonGroup>
             <Button variant="outline-primary" size="sm">Like</Button>
