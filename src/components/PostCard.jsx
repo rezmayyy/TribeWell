@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Card, Badge, Button, ButtonGroup } from 'react-bootstrap';
+import { Card, Badge, Button, Image } from 'react-bootstrap';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../services/Firebase';
+import { FaHeart, FaComment, FaShareAlt } from 'react-icons/fa';
 
 function PostCard({ post }) {
   const [authorInfo, setAuthorInfo] = useState(null);
@@ -12,7 +13,6 @@ function PostCard({ post }) {
       const randomImg = `https://picsum.photos/200/200?random=${Math.random()}`;
       setRandomImage(randomImg);
     };
-
     fetchRandomImage();
   }, []);
 
@@ -29,11 +29,9 @@ function PostCard({ post }) {
         console.error('Error fetching user info:', err);
       }
     };
-
     fetchAuthor();
   }, [post.userId]);
 
-  // Share functionality
   const handleShare = async () => {
     if (navigator.share) {
       try {
@@ -51,100 +49,119 @@ function PostCard({ post }) {
   };
 
   return (
-    <Card className="mb-3">
+    <Card className="mb-4 shadow-sm rounded-4 fade-in" style={{ border: 'none' }}>
       <Card.Body className="d-flex flex-column">
-        <div className="d-flex align-items-center mb-2">
-          <img
+
+        {/* Author Info */}
+        <div className="d-flex align-items-center mb-3">
+          <Image
             src={authorInfo?.profilePicUrl || randomImage}
-            alt="Profile"
-            width={40}
-            height={40}
-            className="rounded-circle me-2"
+            roundedCircle
+            width={45}
+            height={45}
+            className="me-3"
             style={{ objectFit: 'cover' }}
           />
           <div>
-            <strong>{authorInfo?.displayName || 'User'}</strong><br />
-            <small className="text-muted">
-              {post.timestamp?.toDate().toLocaleString() || 'Unknown date'}
-            </small>
-            <br />
-            <Badge bg="secondary" className="mt-1 text-capitalize">
-              {post.type || 'post'}
-            </Badge>
+            <div className="fw-bold">{authorInfo?.displayName || 'User'}</div>
+            <small className="text-muted">{post.timestamp?.toDate().toLocaleString() || 'Unknown date'}</small>
+            <div className="mt-1"><Badge bg="secondary" className="text-capitalize">{post.type || 'post'}</Badge></div>
           </div>
         </div>
 
-        {post.type === 'image' && post.fileURL && (
-          <div className="d-flex flex-column">
-            <div className="d-flex justify-content-center">
-              <Card.Img
-                variant="bottom"
-                src={post.fileURL}
-                style={{ width: '70%', maxWidth: '100%', height: 'auto', objectFit: 'cover' }}
-              />
-            </div>
-            <div className="d-flex align-items-baseline mt-2 px-4">
-              <strong className="me-2">{authorInfo?.displayName || 'User'}:</strong>
-              <Card.Text className="mb-0">
-                {post.caption || post.title || <em>No description</em>}
-              </Card.Text>
-            </div>
-          </div>
-        )}
+        {/* Media Section with soft canvas background */}
+        <div style={{ backgroundColor: '#f8f9fa', borderRadius: '12px', padding: '16px', marginBottom: '15px' }}>
+          {post.type === 'image' && post.fileURL && (
+            <>
+              <div className="d-flex justify-content-center mb-3">
+                <Card.Img
+                  src={post.fileURL}
+                  style={{ width: '90%', height: 'auto', objectFit: 'cover', borderRadius: '10px' }}
+                />
+              </div>
+              <div className="px-2">
+                <h5 className="fw-semibold">{post.caption || post.title || <em>No description</em>}</h5>
+              </div>
+            </>
+          )}
 
-        {post.type === 'video' && post.fileURL && (
-          <video controls className="w-100 mt-2">
-            <source src={post.fileURL} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        )}
+          {post.type === 'video' && post.fileURL && (
+            <div className="w-100 mb-3">
+              <video controls style={{ width: '100%', borderRadius: '10px' }}>
+                <source src={post.fileURL} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          )}
 
-        {post.type === 'audio' && post.fileURL && (
-          <div className="d-flex flex-column mt-2">
-            <div className="d-flex justify-content-center mb-2">
+          {post.type === 'audio' && post.fileURL && (
+            <div className="d-flex flex-column align-items-center mb-3">
               <img
                 src={post.thumbnailURL || randomImage}
                 alt="Audio Thumbnail"
-                style={{ width: '70%', maxWidth: '100%', height: 'auto', objectFit: 'cover', marginBottom: '1rem' }}
+                style={{ width: '80%', maxWidth: '300px', borderRadius: '10px', objectFit: 'cover', marginBottom: '1rem' }}
               />
+              <audio controls style={{ width: '100%' }}>
+                <source src={post.fileURL} type="audio/mpeg" />
+                Your browser does not support the audio element.
+              </audio>
+              <div className="mt-3 text-center">
+                <h5>{post.description || <em>No description</em>}</h5>
+              </div>
             </div>
-            <audio controls className="w-100">
-              <source src={post.fileURL} type="audio/mpeg" />
-              Your browser does not support the audio element.
-            </audio>
-            <div className="mt-2">
-              <strong>{authorInfo?.displayName || 'User'}:</strong>
-              <Card.Text className="mb-0">
-                {post.description || <em>No description</em>}
-              </Card.Text>
-            </div>
-          </div>
-        )}
+          )}
 
-        {post.type === 'article' && (
-          <div className="mt-2 p-2 border rounded">
-            <div className="d-flex justify-content-center">
-              <img
-                src={post.thumbnailURL || randomImage}
-                alt="Article Thumbnail"
-                style={{ width: '70%', maxWidth: '100%', height: 'auto', objectFit: 'cover', marginBottom: '1rem' }}
-              />
-            </div>
-            <h5>{post.articleTitle}</h5>
-            <p className="text-muted">{post.articleSummary}</p>
-            <a href={post.articleUrl} target="_blank" rel="noreferrer">Read more</a>
-          </div>
-        )}
+          {post.type === 'article' && (
+            <>
+              <div className="d-flex justify-content-center mb-3">
+                <img
+                  src={post.thumbnailURL || randomImage}
+                  alt="Article Thumbnail"
+                  style={{ width: '80%', borderRadius: '10px', objectFit: 'cover' }}
+                />
+              </div>
+              <h5>{post.articleTitle}</h5>
+              <p className="text-muted">{post.articleSummary}</p>
+              <a href={post.articleUrl} target="_blank" rel="noreferrer" className="fw-semibold">Read full article →</a>
+            </>
+          )}
+        </div>
 
-        {/* Like, Comment, Share Button*/}
-        <div className="mt-3 d-flex justify-content-between">
-          <ButtonGroup>
-            <Button variant="outline-primary" size="sm">Like</Button>
-            <Button variant="outline-secondary" size="sm">Comment</Button>
-            <Button variant="outline-success" size="sm" onClick={handleShare}>Share</Button>
-          </ButtonGroup>
+        {/* Action Buttons */}
+        <div className="mt-2 d-flex justify-content-around">
+          <Button variant="light" className="rounded-pill action-btn">
+            <FaHeart className="me-2 text-danger" /> Like
+          </Button>
+          <Button variant="light" className="rounded-pill action-btn">
+            <FaComment className="me-2 text-primary" /> Comment
+          </Button>
+          <Button variant="light" className="rounded-pill action-btn" onClick={handleShare}>
+            <FaShareAlt className="me-2 text-success" /> Share
+          </Button>
         </div>
       </Card.Body>
+
+      {/* Animations */}
+      <style>
+        {`
+          .fade-in {
+            animation: fadeIn 0.5s ease;
+          }
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          .action-btn {
+            border: 1px solid #ddd;
+            transition: all 0.3s ease;
+          }
+          .action-btn:hover {
+            background-color: #f8f9fa;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+          }
+        `}
+      </style>
     </Card>
   );
 }
